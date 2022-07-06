@@ -16,10 +16,10 @@ function newColor(workspaceState: vscode.Memento) {
 
 function toRgba(n: string): vscode.Color {
   n = n.replace('#', '')
-  const r = parseInt(n.slice(0,2), 16) / 255
-  const g = parseInt(n.slice(2,4), 16) / 255
-  const b = parseInt(n.slice(4,6), 16) / 255
-  const a = n.length > 7 ? parseInt(n.slice(4,6), 16) / 255 : 1
+  const r = parseInt(n.slice(0, 2), 16) / 255
+  const g = parseInt(n.slice(2, 4), 16) / 255
+  const b = parseInt(n.slice(4, 6), 16) / 255
+  const a = n.length > 7 ? parseInt(n.slice(4, 6), 16) / 255 : 1
   return new vscode.Color(r, g, b, a) // get colors from whats there in text now
 }
 
@@ -36,34 +36,34 @@ class GoColorProvider implements vscode.DocumentColorProvider {
   public provideDocumentColors(
     document: vscode.TextDocument, token: vscode.CancellationToken):
     Thenable<vscode.ColorInformation[]> {
-      let temp = []
-      let m
-      let text = document.getText()
-      let pattern = /console.log\('%c.*', 'color: (#([a-f0-9]{6}(?:[a-f0-9]{0,2}))\b)/g
-      b = []
-      while (m = pattern.exec(text)) {
-        b.push(m[1])
-        const positionStart = document.positionAt(pattern.lastIndex - m[1].length)
-        const positionEnd = positionStart.translate(0, m[1].length)
-        temp.push(new vscode.ColorInformation(new vscode.Range(positionStart, positionEnd), toRgba(b[b.length - 1])))
-      }
-      return new Promise(resolve => {
-        resolve(temp)
-      })
+    let temp = []
+    let m
+    let text = document.getText()
+    let pattern = /console.log\('%c.*', 'color: (#([a-f0-9]{6}(?:[a-f0-9]{0,2}))\b)/g
+    b = []
+    while (m = pattern.exec(text)) {
+      b.push(m[1])
+      const positionStart = document.positionAt(pattern.lastIndex - m[1].length)
+      const positionEnd = positionStart.translate(0, m[1].length)
+      temp.push(new vscode.ColorInformation(new vscode.Range(positionStart, positionEnd), toRgba(b[b.length - 1])))
+    }
+    return new Promise(resolve => {
+      resolve(temp)
+    })
   }
   public provideColorPresentations(
     color: vscode.Color, context: { document: vscode.TextDocument, range: vscode.Range }, token: vscode.CancellationToken):
     Thenable<vscode.ColorPresentation[]> {
-        return new Promise(resolve => {
-        resolve(b.map(el => {
-          const bb = `#${toHex(color.red * 255)}${toHex(color.green * 255)}${toHex(color.blue * 255)}${color.alpha !== 1 ? toHex(Math.round(color.alpha * 255)) : ''}`
-          return {label: bb}
-        }))
-      })
+    return new Promise(resolve => {
+      resolve(b.map(el => {
+        const bb = `#${toHex(color.red * 255)}${toHex(color.green * 255)}${toHex(color.blue * 255)}${color.alpha !== 1 ? toHex(Math.round(color.alpha * 255)) : ''}`
+        return { label: bb }
+      }))
+    })
   }
 }
 
-function insertConsoleLog (type: string, workspaceState: vscode.Memento) {
+function insertConsoleLog(type: string, workspaceState: vscode.Memento) {
   const activeEditor = vscode.window.activeTextEditor
   const document = activeEditor.document
   let selection: (vscode.Selection | vscode.Range) = activeEditor.selection
@@ -71,7 +71,7 @@ function insertConsoleLog (type: string, workspaceState: vscode.Memento) {
   if (selection.isEmpty) selection = document.getWordRangeAtPosition(selection.end) || selection
   const selectedText = document.getText(selection)
   const thisLine = document.lineAt(selection.end.line)
-  let nextLine = document.lineAt(selection.end.translate(1,0).line)
+  let nextLine = document.lineAt(selection.end.translate(1, 0).line)
   const whiteSpacesNumber = Math.max(thisLine.firstNonWhitespaceCharacterIndex, nextLine.firstNonWhitespaceCharacterIndex)
   let spaceee = ' '.repeat(whiteSpacesNumber)
   const endOfThisLine = new vscode.Position(selection.end.line, thisLine.range.end.character)
@@ -84,8 +84,8 @@ function insertConsoleLog (type: string, workspaceState: vscode.Memento) {
   if (document.languageId === 'vue') insertText = insertText.slice(0, -1)
   activeEditor.edit(eb => eb.insert(endOfThisLine, insertText)).then(() => {
     if (selectedText) return
-    nextLine = document.lineAt(selection.end.translate(1,0).line)
-    const endOfNextLine = new vscode.Position(selection.end.translate(1,0).line, nextLine.range.end.character - (document.languageId === 'vue' ? 1 : 2))
+    nextLine = document.lineAt(selection.end.translate(1, 0).line)
+    const endOfNextLine = new vscode.Position(selection.end.translate(1, 0).line, nextLine.range.end.character - (document.languageId === 'vue' ? 1 : 2))
     activeEditor.selection = new vscode.Selection(endOfNextLine, endOfNextLine)
   })
 }
