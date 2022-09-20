@@ -1,47 +1,57 @@
 {
-	"name": "colored-console-log",
-	"displayName": "Colored Console Log",
-	"description": "Creates colored console.log messages for browser",
-	"version": "1.1.0",
-	"publisher": "rehfres",
-	"license": "MIT",
-	"engines": {
-		"vscode": "^1.18.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"repository": "https://github.com/rehfres/colored-console-log",
-	"icon": "icon.png",
-	"contributes": {
-		"keybindings": [
-			{
-				"command": "extension.coloredPrimitives",
-				"key": "ctrl+l ctrl+l",
-				"mac": "cmd+l cmd+l",
-				"when": "editorTextFocus"
-			},
-			{
-				"command": "extension.coloredObject",
-				"key": "ctrl+l ctrl+o",
-				"mac": "cmd+l cmd+o",
-				"when": "editorTextFocus"
-			}
-		]
-	},
-	"activationEvents": [
-		"*"
-	],
-	"main": "./out/extension",
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./"
-	},
-	"devDependencies": {
-		"@types/node": "7.0.4",
-		"@types/vscode": "^1.18.0",
-		"typescript": "^3.1.6",
-		"vscode-test": "^1.3.0"
-	}
+  "name": "recolored-console-log",
+  "displayName": "Recolored Console Log",
+  "description": "Creates colored console.log messages for browser",
+  "version": "1.1.0",
+  "publisher": "dandelionsam",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.18.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "repository": "https://github.com/rehfres/colored-console-log",
+  "icon": "./icon.png",
+  "contributes": {
+    "configuration": {
+      "title": "Some Title",
+      "properties": {
+        "typescript.useCodeSnippetsOnMethodSuggest": {
+          "type": "boolean",
+          "default": false,
+          "description": "Complete functions with their parameter signature."
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "extension.recoloredPrimitives",
+        "key": "ctrl+l ctrl+l",
+        "mac": "cmd+l cmd+l",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "extension.recoloredObject",
+        "key": "ctrl+l ctrl+o",
+        "mac": "cmd+l cmd+o",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./out/extension",
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "7.0.4",
+    "@types/vscode": "^1.18.0",
+    "typescript": "^3.1.6",
+    "vscode-test": "^1.3.0"
+  }
 }
